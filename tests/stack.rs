@@ -1,10 +1,10 @@
-use minustwo::data::stack::Stack;
+use minustwo::machine::stack::Stack;
 
 #[cfg(test)]
 mod tests {
 
     use ethnum::u256;
-    use minustwo::{constants::MAX_STACK_DEPTH, data::errors::StackError};
+    use minustwo::{constants::MAX_STACK_DEPTH, machine::errors::StackError};
 
     use super::*;
 
