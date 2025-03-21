@@ -1,4 +1,3 @@
-use ethnum::{U256, u256};
 use minustwo::machine::memory::Memory;
 
 #[cfg(test)]

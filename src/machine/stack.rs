@@ -1,12 +1,12 @@
 use super::errors::StackError;
 use crate::constants::MAX_STACK_DEPTH;
 use arrayvec::ArrayVec;
-use ethnum::u256;
+use primitive_types::U256;
 use std::fmt;
 
 #[derive(Debug, Clone)]
 pub struct Stack {
-    contents: ArrayVec<u256, MAX_STACK_DEPTH>,
+    contents: ArrayVec<U256, MAX_STACK_DEPTH>,
 }
 
 impl Stack {
@@ -16,8 +16,8 @@ impl Stack {
         }
     }
 
-    pub fn push(&mut self, element: u256) -> Result<(), StackError> {
-        if element >= (u256::MAX) {
+    pub fn push(&mut self, element: U256) -> Result<(), StackError> {
+        if element >= (U256::max_value()) {
             return Err(StackError::InvalidItem);
         }
 
@@ -29,11 +29,11 @@ impl Stack {
         Ok(())
     }
 
-    pub fn pop(&mut self) -> Result<u256, StackError> {
+    pub fn pop(&mut self) -> Result<U256, StackError> {
         self.contents.pop().ok_or(StackError::EmptyStack)
     }
 
-    pub fn peek(&self) -> Result<&u256, StackError> {
+    pub fn peek(&self) -> Result<&U256, StackError> {
         self.contents.last().ok_or(StackError::EmptyStack)
     }
 

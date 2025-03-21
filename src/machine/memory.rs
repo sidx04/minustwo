@@ -1,5 +1,5 @@
 use super::errors::MemoryError;
-use ethnum::{U256, u256};
+use primitive_types::U256;
 
 #[derive(Clone, Debug)]
 pub struct Memory {
@@ -12,7 +12,7 @@ impl Memory {
     pub fn init(limit: usize) -> Self {
         Self {
             data: Vec::new(),
-            effective_len: U256::ZERO,
+            effective_len: U256::zero(),
             limit,
         }
     }
@@ -85,8 +85,8 @@ impl Memory {
     }
 
     fn update_effective_len(&mut self, new_len: usize) {
-        if u256::new(new_len as u128) > self.effective_len {
-            self.effective_len = u256::new(new_len as u128);
+        if U256::from(new_len) > self.effective_len {
+            self.effective_len = U256::from(new_len);
         }
     }
 

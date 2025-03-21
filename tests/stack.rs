@@ -1,9 +1,9 @@
 use minustwo::machine::stack::Stack;
+use primitive_types::U256;
 
 #[cfg(test)]
 mod tests {
 
-    use ethnum::u256;
     use minustwo::{constants::MAX_STACK_DEPTH, machine::errors::StackError};
 
     use super::*;
@@ -16,19 +16,19 @@ mod tests {
         assert!(matches!(stack.peek(), Err(StackError::EmptyStack)));
         assert!(matches!(stack.pop(), Err(StackError::EmptyStack)));
 
-        assert!(stack.push(u256::new(163)).is_ok());
-        assert!(stack.push(u256::new(205)).is_ok());
+        assert!(stack.push(U256::from(163)).is_ok());
+        assert!(stack.push(U256::from(205)).is_ok());
 
         assert!(!stack.is_empty());
 
         let top = stack.peek().unwrap();
-        assert_eq!(*top, u256::new(205));
+        assert_eq!(*top, U256::from(205));
 
         let popped = stack.pop().unwrap();
-        assert_eq!(popped, u256::new(205));
+        assert_eq!(popped, U256::from(205));
 
         let popped = stack.pop().unwrap();
-        assert_eq!(popped, u256::new(163));
+        assert_eq!(popped, U256::from(163));
 
         assert!(stack.is_empty());
         assert!(matches!(stack.pop(), Err(StackError::EmptyStack)));
@@ -39,10 +39,10 @@ mod tests {
         let mut stack = Stack::init();
 
         for i in 0..MAX_STACK_DEPTH {
-            assert!(stack.push(u256::new(i as u128)).is_ok());
+            assert!(stack.push(U256::from(i as u128)).is_ok());
         }
 
-        let result = stack.push(u256::new(2));
+        let result = stack.push(U256::from(2));
 
         assert!(matches!(result, Err(StackError::StackOverflow)));
     }
@@ -51,7 +51,7 @@ mod tests {
     fn test_invalid_item() {
         let mut stack = Stack::init();
 
-        let result = stack.push(u256::MAX);
+        let result = stack.push(U256::max_value());
         assert!(matches!(result, Err(StackError::InvalidItem)));
     }
 
@@ -59,8 +59,8 @@ mod tests {
     fn test_stack_clear() {
         let mut stack = Stack::init();
 
-        assert!(stack.push(u256::new(5)).is_ok());
-        assert!(stack.push(u256::new(15)).is_ok());
+        assert!(stack.push(U256::from(5)).is_ok());
+        assert!(stack.push(U256::from(15)).is_ok());
         assert!(!stack.is_empty());
 
         stack.clear();
