@@ -6,7 +6,6 @@ pub enum StackError {
     StackOverflow,
     EmptyStack,
 }
-
 #[derive(Debug, Clone)]
 pub enum MemoryError {
     InvalidMemoryAccess { offset: usize },

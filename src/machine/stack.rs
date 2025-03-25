@@ -1,5 +1,5 @@
-use super::errors::StackError;
 use crate::constants::MAX_STACK_DEPTH;
+use crate::errors::memory::StackError;
 use arrayvec::ArrayVec;
 use primitive_types::U256;
 use std::fmt;

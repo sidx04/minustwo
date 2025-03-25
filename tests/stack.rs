@@ -4,7 +4,7 @@ use primitive_types::U256;
 #[cfg(test)]
 mod tests {
 
-    use minustwo::{constants::MAX_STACK_DEPTH, machine::errors::StackError};
+    use minustwo::{constants::MAX_STACK_DEPTH, errors::memory::StackError};
 
     use super::*;
 

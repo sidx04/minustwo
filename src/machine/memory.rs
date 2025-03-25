@@ -1,5 +1,6 @@
-use super::errors::MemoryError;
 use primitive_types::U256;
+
+use crate::errors::memory::MemoryError;
 
 #[derive(Clone, Debug)]
 pub struct Memory {
