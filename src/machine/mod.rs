@@ -1,12 +1,13 @@
 use std::rc::Rc;
 
-pub use self::{memory::Memory, stack::Stack, state::State};
+pub use self::{memory::Memory, stack::Stack};
 
 pub mod memory;
 pub mod stack;
 pub mod state;
 pub mod storage;
 
+#[derive(Debug, Clone)]
 pub struct Machine {
     pub data: Rc<Vec<u8>>,
     pub code: Rc<Vec<u8>>,
