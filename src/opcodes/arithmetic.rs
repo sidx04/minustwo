@@ -32,6 +32,11 @@ pub fn execute_arithmetic(op: Opcode, machine: &mut Machine) -> Result<(), Stack
             let inter = (c.checked_add(b)).unwrap();
             inter.checked_rem(a)
         }
+        Opcode::EXP => {
+            println!("{}", b.pow(a));
+            Some(b.pow(a))
+        }
+        Opcode::SIGNEXTEND => todo!(),
         _ => todo!(),
     }
     .unwrap();

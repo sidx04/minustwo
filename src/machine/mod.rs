@@ -14,6 +14,7 @@ pub struct Machine {
     pub memory: Memory,
     pub stack: Stack,
     pub pc: usize,
+    pub halted: bool,
 }
 
 impl Machine {
@@ -24,6 +25,7 @@ impl Machine {
             memory: Memory::init(memory_limit),
             stack: Stack::init(),
             pc: 0,
+            halted: false,
         }
     }
 

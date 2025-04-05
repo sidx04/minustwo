@@ -1,5 +1,5 @@
 use minustwo::opcodes::{Opcode, arithmetic::execute_arithmetic};
-use minustwo::{machine::Machine, opcodes::stack_ops::execute_push1};
+use minustwo::{machine::Machine, opcodes::stack_ops::execute_stack};
 use primitive_types::U256;
 use std::rc::Rc;
 mod tests {
@@ -11,7 +11,7 @@ mod tests {
         let code = Rc::new(vec![0x60, 0x0A]);
         let mut machine = Machine::new(code, Rc::new(vec![]), 1024);
 
-        execute_push1(&mut machine).unwrap();
+        execute_stack(Opcode::PUSH1, &mut machine).unwrap();
         assert_eq!(machine.stack.pop().unwrap(), U256::from(10));
         assert_eq!(machine.pc, 2);
     }
