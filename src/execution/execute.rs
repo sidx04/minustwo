@@ -1,4 +1,4 @@
-use crate::errors::memory::StackError;
+use crate::errors::stack::StackError;
 use crate::machine::Machine;
 use crate::opcodes::{
     Opcode,
@@ -35,6 +35,6 @@ pub fn execute_opcode(machine: &mut Machine, opcode: u8) -> Result<(), StackErro
 
         _ => Err(StackError::InvalidItem), // Handle unknown opcodes
     }?;
-    println!("After executing {:02X?}: {}", opcode, machine.stack);
+    println!("After executing {:02X?}:\n{}", opcode, machine.stack);
     Ok(())
 }

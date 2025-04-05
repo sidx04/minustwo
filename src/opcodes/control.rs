@@ -1,6 +1,6 @@
 use primitive_types::U256;
 
-use crate::{errors::memory::StackError, machine::Machine};
+use crate::{errors::stack::StackError, machine::Machine};
 
 use super::Opcode;
 

@@ -1,5 +1,5 @@
 use crate::constants::MAX_STACK_DEPTH;
-use crate::errors::memory::StackError;
+use crate::errors::stack::StackError;
 use arrayvec::ArrayVec;
 use primitive_types::U256;
 use std::fmt;
@@ -48,10 +48,19 @@ impl Stack {
 
 impl fmt::Display for Stack {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "Stack: ")?;
-        for (i, element) in self.contents.iter().enumerate().rev() {
-            writeln!(f, "  [{}]: 0x{:02X}", i, element)?;
+        writeln!(f, "┌────────────────── Stack ──────────────────┐")?;
+        if self.contents.is_empty() {
+            writeln!(f, "│         [ empty stack ]       │")?;
+        } else {
+            for (i, value) in self.contents.iter().rev().enumerate() {
+                writeln!(
+                    f,
+                    "│ [{:02}] │ 0x{:0>32X} │",
+                    self.contents.len() - 1 - i,
+                    value
+                )?;
+            }
         }
-        Ok(())
+        writeln!(f, "└───────────────────────────────────────────┘")
     }
 }

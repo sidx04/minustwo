@@ -1,5 +1,5 @@
 use super::Opcode;
-use crate::{errors::memory::StackError, machine::Machine};
+use crate::{errors::stack::StackError, machine::Machine};
 use primitive_types::U256;
 
 pub fn execute_stack(op: Opcode, machine: &mut Machine) -> Result<(), StackError> {
