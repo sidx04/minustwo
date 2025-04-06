@@ -4,7 +4,7 @@ use crate::errors::memory::MemoryError;
 
 #[derive(Clone, Debug)]
 pub struct Memory {
-    data: Vec<u8>,
+    data: Vec<usize>,
     effective_len: U256,
     limit: usize,
 }
@@ -18,7 +18,7 @@ impl Memory {
         }
     }
 
-    pub fn load(&self, offset: usize) -> Result<u8, MemoryError> {
+    pub fn load(&self, offset: usize) -> Result<usize, MemoryError> {
         // offset cannot be more than limit
         if offset >= self.limit {
             return Err(MemoryError::InvalidMemoryAccess { offset });
@@ -31,13 +31,13 @@ impl Memory {
         }
     }
 
-    pub fn access(&self, offset: usize, size: usize) -> Result<Vec<u8>, MemoryError> {
+    pub fn access(&self, offset: usize, size: usize) -> Result<Vec<usize>, MemoryError> {
         // accessing beyond memory limits
         if offset + size > self.limit {
             return Err(MemoryError::InvalidMemoryAccess { offset });
         }
 
-        let mut result = vec![0u8; size];
+        let mut result = vec![0usize; size];
 
         if offset < self.data.len() {
             let available = &self.data[offset..self.data.len().min(offset + size)];
@@ -46,7 +46,7 @@ impl Memory {
         Ok(result)
     }
 
-    pub fn store(&mut self, offset: usize, value: &[u8]) -> Result<(), MemoryError> {
+    pub fn store(&mut self, offset: usize, value: &[usize]) -> Result<(), MemoryError> {
         let new_size = offset + value.len();
 
         // do not store anything beyond memory limit

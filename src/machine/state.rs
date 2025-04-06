@@ -6,7 +6,7 @@ pub struct Account {
     pub nonce: U256,
     pub balance: U256,
     pub storage: BTreeMap<U256, U256>,
-    pub code: Vec<u8>,
+    pub code: Vec<usize>,
     pub address: H160,
 }
 
@@ -24,7 +24,7 @@ impl AccountState {
         self.accounts.get_mut(address)
     }
 
-    pub fn create_account(&mut self, address: H160, balance: U256, code: Vec<u8>) {
+    pub fn create_account(&mut self, address: H160, balance: U256, code: Vec<usize>) {
         self.accounts.insert(
             address,
             Account {

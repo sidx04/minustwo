@@ -9,8 +9,8 @@ pub mod storage;
 
 #[derive(Debug, Clone)]
 pub struct Machine {
-    pub data: Rc<Vec<u8>>,
-    pub code: Rc<Vec<u8>>,
+    pub data: Rc<Vec<usize>>,
+    pub code: Rc<Vec<usize>>,
     pub memory: Memory,
     pub stack: Stack,
     pub pc: usize,
@@ -18,7 +18,7 @@ pub struct Machine {
 }
 
 impl Machine {
-    pub fn new(code: Rc<Vec<u8>>, data: Rc<Vec<u8>>, memory_limit: usize) -> Self {
+    pub fn new(code: Rc<Vec<usize>>, data: Rc<Vec<usize>>, memory_limit: usize) -> Self {
         Self {
             data,
             code,
@@ -29,7 +29,7 @@ impl Machine {
         }
     }
 
-    pub fn code(&self) -> &[u8] {
+    pub fn code(&self) -> &[usize] {
         &self.code
     }
 
