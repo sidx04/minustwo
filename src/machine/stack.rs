@@ -16,6 +16,10 @@ impl Stack {
         }
     }
 
+    pub fn get_contents(&self) -> ArrayVec<U256, MAX_STACK_DEPTH> {
+        self.contents.clone()
+    }
+
     pub fn push(&mut self, element: U256) -> Result<(), StackError> {
         if element >= (U256::max_value()) {
             return Err(StackError::InvalidItem);
@@ -53,7 +57,7 @@ impl fmt::Display for Stack {
             writeln!(f, "│         [ empty stack ]       │")?;
         } else {
             for (i, value) in self.contents.iter().enumerate() {
-                writeln!(f, "│ [{:02}] │ 0x{:0>32X} │", i, value)?;
+                writeln!(f, "│ [{:02}] │ 0x{:0>32X} │", i + 1, value)?;
             }
         }
         writeln!(f, "└───────────────────────────────────────────┘")
