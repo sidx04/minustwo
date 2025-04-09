@@ -56,8 +56,13 @@ impl fmt::Display for Stack {
         if self.contents.is_empty() {
             writeln!(f, "│         [ empty stack ]       │")?;
         } else {
-            for (i, value) in self.contents.iter().enumerate() {
-                writeln!(f, "│ [{:02}] │ 0x{:0>32X} │", i + 1, value)?;
+            for (i, value) in self.contents.iter().rev().enumerate() {
+                writeln!(
+                    f,
+                    "│ [{:02}] │ 0x{:0>32X} │",
+                    self.contents.len() - 1 - i,
+                    value
+                )?;
             }
         }
         writeln!(f, "└───────────────────────────────────────────┘")
