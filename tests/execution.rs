@@ -17,7 +17,7 @@ mod tests {
         };
 
         // [`Opcode`]: [PUSH1 1, PUSH1 10, ADD, STOP]
-        let code: Vec<u8> = vec![0x60, 0x01, 0x60, 0x0A, 0x01, 0x00];
+        let code: Vec<usize> = vec![0x60, 0x01, 0x60, 0x0A, 0x01, 0x00];
 
         let caller = H160::from_low_u64_be(0xabc);
         let callee = H160::from_low_u64_be(0xdef);
