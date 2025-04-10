@@ -11,7 +11,7 @@ pub struct ExecutionContext<'a> {
     pub caller: H160,
     pub callee: H160,
     pub value: U256,
-    pub input_data: Vec<u8>,
+    pub input_data: Vec<usize>,
 }
 
 impl<'a> ExecutionContext<'a> {
@@ -21,7 +21,7 @@ impl<'a> ExecutionContext<'a> {
         caller: H160,
         callee: H160,
         value: U256,
-        input_data: Vec<u8>,
+        input_data: Vec<usize>,
     ) -> Self {
         Self {
             machine,

@@ -54,10 +54,10 @@ pub fn execute_logical(op: Opcode, machine: &mut Machine) -> Result<(), StackErr
     let b = stack.pop()?;
 
     let result = match op {
-        Opcode::LT | Opcode::SLT => U256::from((a < b) as u8),
-        Opcode::GT | Opcode::SGT => U256::from((a > b) as u8),
-        Opcode::EQ => U256::from((a == b) as u8),
-        Opcode::ISZERO => U256::from((a == U256::zero()) as u8),
+        Opcode::LT | Opcode::SLT => U256::from((a < b) as usize),
+        Opcode::GT | Opcode::SGT => U256::from((a > b) as usize),
+        Opcode::EQ => U256::from((a == b) as usize),
+        Opcode::ISZERO => U256::from((a == U256::zero()) as usize),
         Opcode::AND => a & b,
         Opcode::OR => a | b,
         Opcode::XOR => a ^ b,
