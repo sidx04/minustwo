@@ -49,6 +49,25 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_duplicate_panic() {
+        let code = Rc::new(vec![0x01, 0x00, 0x00]);
+        let mut machine = Machine::new(code.clone(), Rc::new(vec![]), 1024);
+
+        let a = code[0];
+        let b = code[1];
+
+        machine.stack.push(U256::from(a)).unwrap();
+        machine.stack.push(U256::from(b)).unwrap();
+
+        println!("Before duplicating:\n{}", machine.stack);
+
+        execute_stack_duplicate(Opcode::DUP3, 3, &mut machine).unwrap();
+
+        println!("After duplicating:\n{}", machine.stack);
+    }
+
+    #[test]
     fn test_add() {
         let code = Rc::new(vec![0x10, 0x0A]);
         let mut machine = Machine::new(code.clone(), Rc::new(vec![]), 1024);
