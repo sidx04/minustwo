@@ -1,5 +1,6 @@
 use crate::errors::stack::StackError;
 use crate::machine::Machine;
+use crate::opcodes::stack_ops::execute_stack_duplicate;
 use crate::opcodes::{
     Opcode,
     arithmetic::{execute_arithmetic, execute_logical},
@@ -7,7 +8,7 @@ use crate::opcodes::{
     stack_ops::execute_stack,
 };
 
-pub fn execute_opcode(machine: &mut Machine, opcode: u8) -> Result<(), StackError> {
+pub fn execute_opcode(machine: &mut Machine, opcode: usize) -> Result<(), StackError> {
     match opcode {
         0x00 => execute_control(Opcode::STOP, machine),
         0x01 => execute_arithmetic(Opcode::ADD, machine),
@@ -31,8 +32,44 @@ pub fn execute_opcode(machine: &mut Machine, opcode: u8) -> Result<(), StackErro
         0x17 => execute_logical(Opcode::OR, machine),
         0x18 => execute_logical(Opcode::XOR, machine),
         0x19 => execute_logical(Opcode::NOT, machine),
-        0x60 => execute_stack(Opcode::PUSH1, machine),
-
+        0x60 => execute_stack(Opcode::PUSH1, 1, machine),
+        0x61 => execute_stack(Opcode::PUSH2, 2, machine),
+        0x62 => execute_stack(Opcode::PUSH3, 3, machine),
+        0x63 => execute_stack(Opcode::PUSH4, 4, machine),
+        0x64 => execute_stack(Opcode::PUSH5, 5, machine),
+        0x65 => execute_stack(Opcode::PUSH6, 6, machine),
+        0x66 => execute_stack(Opcode::PUSH7, 7, machine),
+        0x67 => execute_stack(Opcode::PUSH8, 8, machine),
+        0x68 => execute_stack(Opcode::PUSH9, 9, machine),
+        0x69 => execute_stack(Opcode::PUSH10, 10, machine),
+        0x6A => execute_stack(Opcode::PUSH11, 11, machine),
+        0x6B => execute_stack(Opcode::PUSH12, 12, machine),
+        0x6C => execute_stack(Opcode::PUSH13, 13, machine),
+        0x6D => execute_stack(Opcode::PUSH14, 14, machine),
+        0x6E => execute_stack(Opcode::PUSH15, 15, machine),
+        0x6F => execute_stack(Opcode::PUSH16, 16, machine),
+        0x70 => execute_stack(Opcode::PUSH17, 17, machine),
+        0x71 => execute_stack(Opcode::PUSH18, 18, machine),
+        0x72 => execute_stack(Opcode::PUSH19, 19, machine),
+        0x73 => execute_stack(Opcode::PUSH20, 20, machine),
+        0x74 => execute_stack(Opcode::PUSH21, 21, machine),
+        0x75 => execute_stack(Opcode::PUSH22, 22, machine),
+        0x76 => execute_stack(Opcode::PUSH23, 23, machine),
+        0x77 => execute_stack(Opcode::PUSH24, 24, machine),
+        0x78 => execute_stack(Opcode::PUSH25, 25, machine),
+        0x79 => execute_stack(Opcode::PUSH26, 26, machine),
+        0x7A => execute_stack(Opcode::PUSH27, 27, machine),
+        0x7B => execute_stack(Opcode::PUSH28, 28, machine),
+        0x7C => execute_stack(Opcode::PUSH29, 29, machine),
+        0x7D => execute_stack(Opcode::PUSH30, 30, machine),
+        0x7E => execute_stack(Opcode::PUSH31, 31, machine),
+        0x7F => execute_stack(Opcode::PUSH32, 32, machine),
+        0x80 => execute_stack_duplicate(Opcode::DUP1, 1, machine),
+        0x81 => execute_stack_duplicate(Opcode::DUP2, 2, machine),
+        0x82 => execute_stack_duplicate(Opcode::DUP3, 3, machine),
+        0x83 => execute_stack_duplicate(Opcode::DUP4, 4, machine),
+        0x84 => execute_stack_duplicate(Opcode::DUP5, 5, machine),
+        0x85 => execute_stack_duplicate(Opcode::DUP6, 6, machine),
         _ => Err(StackError::InvalidItem), // Handle unknown opcodes
     }?;
     println!("After executing {:02X?}:\n{}", opcode, machine.stack);
