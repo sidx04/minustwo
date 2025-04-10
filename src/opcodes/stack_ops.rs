@@ -2,7 +2,11 @@ use super::Opcode;
 use crate::{errors::stack::StackError, machine::Machine};
 use primitive_types::U256;
 
-pub fn execute_stack(op: Opcode, _offset: usize, machine: &mut Machine) -> Result<(), StackError> {
+pub fn execute_stack_push(
+    _op: Opcode,
+    _offset: usize,
+    machine: &mut Machine,
+) -> Result<(), StackError> {
     let pc = machine.pc;
 
     if pc + 1 >= machine.code.len() {
