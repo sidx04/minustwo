@@ -56,6 +56,22 @@ mod tests {
     }
 
     #[test]
+    fn test_stack_pop() {
+        let mut stack = Stack::init();
+
+        assert!(stack.push(U256::from(5)).is_ok());
+        assert!(stack.push(U256::from(15)).is_ok());
+
+        assert_eq!(stack.pop().unwrap(), U256::from(15));
+
+        let _ = stack.pop();
+
+        println!("{stack}");
+
+        assert!(matches!(stack.peek(), Err(StackError::EmptyStack)));
+    }
+
+    #[test]
     fn test_stack_clear() {
         let mut stack = Stack::init();
 

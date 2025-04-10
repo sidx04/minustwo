@@ -24,6 +24,11 @@ pub fn execute_stack_push(
     Ok(())
 }
 
+pub fn execute_stack_pop(_op: Opcode, machine: &mut Machine) -> Result<(), StackError> {
+    let _ = &machine.stack.pop();
+    Ok(())
+}
+
 pub fn execute_stack_duplicate(
     _op: Opcode,
     index: usize,

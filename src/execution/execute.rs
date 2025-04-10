@@ -1,6 +1,6 @@
 use crate::errors::stack::StackError;
 use crate::machine::Machine;
-use crate::opcodes::stack_ops::execute_stack_duplicate;
+use crate::opcodes::stack_ops::{execute_stack_duplicate, execute_stack_pop};
 use crate::opcodes::{
     Opcode,
     arithmetic::{execute_arithmetic, execute_logical},
@@ -32,6 +32,7 @@ pub fn execute_opcode(machine: &mut Machine, opcode: usize) -> Result<(), StackE
         0x17 => execute_logical(Opcode::OR, machine),
         0x18 => execute_logical(Opcode::XOR, machine),
         0x19 => execute_logical(Opcode::NOT, machine),
+        0x50 => execute_stack_pop(Opcode::POP, machine),
         0x60 => execute_stack_push(Opcode::PUSH1, 1, machine),
         0x61 => execute_stack_push(Opcode::PUSH2, 2, machine),
         0x62 => execute_stack_push(Opcode::PUSH3, 3, machine),
