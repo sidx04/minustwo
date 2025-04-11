@@ -6,3 +6,9 @@ edition = "2024"
 [dependencies]
 arrayvec = "0.7.6"
 primitive-types = "0.13.1"
+clap = { version = "4", features = ["derive"] }
+hex = "0.4.3"
+
+[[bin]]
+name = "minustwo"
+path = "src/main.rs"
