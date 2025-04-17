@@ -138,4 +138,34 @@ mod tests {
         assert_eq!(popped_val, U256::from(0x0A));
         assert_eq!(machine.pc, 2);
     }
+
+    #[test]
+    fn test_memory_codes() {
+        let mut state = AccountState {
+            accounts: HashMap::new(),
+        };
+        // [`Opcode`]: [PUSH1 FF, PUSH1 00, MSTORE, PUSH1 FF, PUSH1 01, MSTORE]
+        let code = vec![0x60, 0xFF, 0x60, 0x00, 0x52, 0x60, 0xFF, 0x60, 0x01, 0x52];
+
+        let caller = H160::from_low_u64_be(0xabc);
+        let callee = H160::from_low_u64_be(0xdef);
+
+        state.create_account(caller, U256::from(1000), vec![]);
+        state.create_account(callee, U256::zero(), code);
+
+        let code = Rc::new(state.get_account(&callee).unwrap().code.clone());
+        let mut machine = Machine::new(code, Rc::new(vec![]), 256);
+
+        let mut ctx = ExecutionContext {
+            machine: &mut machine,
+            state: &mut state,
+            caller,
+            callee,
+            value: U256::zero(),
+            input_data: vec![],
+        };
+        ctx.run().unwrap();
+
+        println!("{}", machine.memory);
+    }
 }

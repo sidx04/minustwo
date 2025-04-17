@@ -1,13 +1,12 @@
 use crate::errors::Error;
 use crate::errors::opcode::OpcodeError;
 use crate::machine::Machine;
-use crate::opcodes::memory_ops::execute_memory;
-use crate::opcodes::stack_ops::{execute_stack_duplicate, execute_stack_pop};
 use crate::opcodes::{
     Opcode,
     arithmetic::{execute_arithmetic, execute_logical},
     control::execute_control,
-    stack_ops::execute_stack_push,
+    memory_ops::execute_memory,
+    stack_ops::{execute_stack_duplicate, execute_stack_pop, execute_stack_push},
 };
 
 pub fn execute_opcode(machine: &mut Machine, opcode: usize) -> Result<(), Error> {
@@ -36,6 +35,7 @@ pub fn execute_opcode(machine: &mut Machine, opcode: usize) -> Result<(), Error>
         0x19 => execute_logical(Opcode::NOT, machine),
         0x50 => execute_stack_pop(Opcode::POP, machine),
         0x51 => execute_memory(Opcode::MLOAD, machine),
+        0x52 => execute_memory(Opcode::MSTORE, machine),
         0x60 => execute_stack_push(Opcode::PUSH1, 1, machine),
         0x61 => execute_stack_push(Opcode::PUSH2, 2, machine),
         0x62 => execute_stack_push(Opcode::PUSH3, 3, machine),
