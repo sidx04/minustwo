@@ -1,5 +1,7 @@
-use crate::errors::stack::StackError;
+use crate::errors::Error;
+use crate::errors::opcode::OpcodeError;
 use crate::machine::Machine;
+use crate::opcodes::memory_ops::execute_memory;
 use crate::opcodes::stack_ops::{execute_stack_duplicate, execute_stack_pop};
 use crate::opcodes::{
     Opcode,
@@ -8,7 +10,7 @@ use crate::opcodes::{
     stack_ops::execute_stack_push,
 };
 
-pub fn execute_opcode(machine: &mut Machine, opcode: usize) -> Result<(), StackError> {
+pub fn execute_opcode(machine: &mut Machine, opcode: usize) -> Result<(), Error> {
     match opcode {
         0x00 => execute_control(Opcode::STOP, machine),
         0x01 => execute_arithmetic(Opcode::ADD, machine),
@@ -33,6 +35,7 @@ pub fn execute_opcode(machine: &mut Machine, opcode: usize) -> Result<(), StackE
         0x18 => execute_logical(Opcode::XOR, machine),
         0x19 => execute_logical(Opcode::NOT, machine),
         0x50 => execute_stack_pop(Opcode::POP, machine),
+        0x51 => execute_memory(Opcode::MLOAD, machine),
         0x60 => execute_stack_push(Opcode::PUSH1, 1, machine),
         0x61 => execute_stack_push(Opcode::PUSH2, 2, machine),
         0x62 => execute_stack_push(Opcode::PUSH3, 3, machine),
@@ -71,7 +74,7 @@ pub fn execute_opcode(machine: &mut Machine, opcode: usize) -> Result<(), StackE
         0x83 => execute_stack_duplicate(Opcode::DUP4, 4, machine),
         0x84 => execute_stack_duplicate(Opcode::DUP5, 5, machine),
         0x85 => execute_stack_duplicate(Opcode::DUP6, 6, machine),
-        _ => Err(StackError::InvalidItem), // Handle unknown opcodes
+        _ => Err(Error::OpcodeError(OpcodeError::InvalidOpcode(opcode))), // Handle unknown opcodes
     }?;
     println!("After executing {:02X?}:\n{}", opcode, machine.stack);
     Ok(())

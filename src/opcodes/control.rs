@@ -1,13 +1,15 @@
 use primitive_types::U256;
 
-use crate::{errors::stack::StackError, machine::Machine};
+use crate::{errors::Error, machine::Machine};
 
 use super::Opcode;
 
-pub fn execute_control(op: Opcode, machine: &mut Machine) -> Result<(), StackError> {
+pub fn execute_control(op: Opcode, machine: &mut Machine) -> Result<(), Error> {
     let stack = &mut machine.stack;
+    let memory = &mut machine.memory;
+
     let _ = match op {
-        Opcode::STOP => {
+        Opcode::STOP | Opcode::RETURN => {
             // let exit_status = match stack.is_empty() {
             //     true => {
             //         println!("Code executed!");
@@ -19,6 +21,9 @@ pub fn execute_control(op: Opcode, machine: &mut Machine) -> Result<(), StackErr
             //     }
             // };
             // println!("Machine exited with status: {}", exit_status);
+            stack.clear();
+            memory.clear();
+
             machine.halted = true;
         }
         _ => todo!(),

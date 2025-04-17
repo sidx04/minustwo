@@ -1,10 +1,10 @@
 use primitive_types::U256;
 
-use crate::errors::stack::StackError;
+use crate::errors::{Error, StackError};
 use crate::machine::Machine;
 use crate::opcodes::Opcode;
 
-pub fn execute_arithmetic(op: Opcode, machine: &mut Machine) -> Result<(), StackError> {
+pub fn execute_arithmetic(op: Opcode, machine: &mut Machine) -> Result<(), Error> {
     let stack = &mut machine.stack;
     let a = stack.pop()?;
     let b = stack.pop()?;
@@ -15,7 +15,7 @@ pub fn execute_arithmetic(op: Opcode, machine: &mut Machine) -> Result<(), Stack
         Opcode::MUL => a.checked_mul(b),
         Opcode::DIV => {
             if b == U256::zero() {
-                return Err(StackError::InvalidItem);
+                return Err(Error::StackError(StackError::InvalidItem));
             }
             a.checked_div(b)
         }
@@ -48,7 +48,7 @@ pub fn execute_arithmetic(op: Opcode, machine: &mut Machine) -> Result<(), Stack
     Ok(())
 }
 
-pub fn execute_logical(op: Opcode, machine: &mut Machine) -> Result<(), StackError> {
+pub fn execute_logical(op: Opcode, machine: &mut Machine) -> Result<(), Error> {
     let stack = &mut machine.stack;
     let a = stack.pop()?;
     let b = stack.pop()?;
