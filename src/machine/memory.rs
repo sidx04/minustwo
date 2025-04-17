@@ -4,7 +4,7 @@ use crate::errors::memory::MemoryError;
 
 #[derive(Clone, Debug)]
 pub struct Memory {
-    data: Vec<usize>,
+    data: Vec<u8>,
     effective_len: U256,
     limit: usize,
 }
@@ -12,18 +12,20 @@ pub struct Memory {
 impl Memory {
     pub fn init(limit: usize) -> Self {
         Self {
-            data: Vec::new(),
+            data: vec![0; limit],
             effective_len: U256::zero(),
             limit,
         }
     }
 
-    pub fn load(&self, offset: usize) -> Result<usize, MemoryError> {
+    pub fn load(&self, offset: usize) -> Result<u8, MemoryError> {
         // offset cannot be more than limit
         if offset >= self.limit {
-            return Err(MemoryError::InvalidMemoryAccess { offset });
+            return Err(MemoryError::InvalidMemoryAccess {
+                offset: offset.into(),
+            });
         }
-        // offset is accessing unwrittem parts of memory
+        // offset is accessing unwritten parts of memory
         if offset >= self.data.len() {
             Ok(0)
         } else {
@@ -31,13 +33,13 @@ impl Memory {
         }
     }
 
-    pub fn access(&self, offset: usize, size: usize) -> Result<Vec<usize>, MemoryError> {
+    pub fn access(&self, offset: usize, size: usize) -> Result<Vec<u8>, MemoryError> {
         // accessing beyond memory limits
         if offset + size > self.limit {
             return Err(MemoryError::InvalidMemoryAccess { offset });
         }
 
-        let mut result = vec![0usize; size];
+        let mut result = vec![0u8; size];
 
         if offset < self.data.len() {
             let available = &self.data[offset..self.data.len().min(offset + size)];
@@ -46,7 +48,7 @@ impl Memory {
         Ok(result)
     }
 
-    pub fn store(&mut self, offset: usize, value: &[usize]) -> Result<(), MemoryError> {
+    pub fn store(&mut self, offset: usize, value: &[u8]) -> Result<(), MemoryError> {
         let new_size = offset + value.len();
 
         // do not store anything beyond memory limit
@@ -91,6 +93,10 @@ impl Memory {
         }
     }
 
+    pub fn clear(&mut self) {
+        self.data.clear()
+    }
+
     // Actual way how the gas cost for a memory expansion is calculated, TBD
     pub fn compute_memory_expansion_cost(&mut self) {
         todo!()
@@ -106,9 +112,9 @@ impl fmt::Display for Memory {
         writeln!(f, "  effective_len: {}", self.effective_len)?;
         writeln!(f, "  data ({} bytes):", self.data.len())?;
 
-        const BYTES_PER_LINE: usize = 8; // group by 8 bytes
+        const BYTES_PER_LINE: usize = 16;
         for (i, chunk) in self.data.chunks(BYTES_PER_LINE).enumerate() {
-            write!(f, "    {:04X}: ", i * BYTES_PER_LINE)?;
+            write!(f, "    {:04}: ", i * BYTES_PER_LINE)?;
             for byte in chunk {
                 write!(f, "{:02X} ", byte)?;
             }
