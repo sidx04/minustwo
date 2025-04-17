@@ -84,4 +84,23 @@ mod tests {
         assert!(stack.is_empty());
         assert!(matches!(stack.peek(), Err(StackError::EmptyStack)));
     }
+
+    #[test]
+    fn test_push32() {
+        let mut stack = Stack::init();
+
+        stack.push(U256::from(1)).unwrap();
+        stack
+            .push(
+                U256::from_str_radix(
+                    "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                    16,
+                )
+                .unwrap(),
+            )
+            .unwrap();
+
+        println!("{stack}");
+        println!("{:02X}", stack.pop().unwrap());
+    }
 }
