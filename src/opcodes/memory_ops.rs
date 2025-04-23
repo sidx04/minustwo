@@ -43,10 +43,7 @@ pub fn execute_memory(op: Opcode, machine: &mut Machine) -> Result<(), Error> {
 
             memory.store(offset_byte.into(), &value)?;
         }
-        Opcode::MSIZE => {
-            // memory.effective_len(),
-            todo!()
-        }
+        Opcode::MSIZE => stack.push(memory.effective_len())?,
         _ => todo!(),
     };
     machine.pc += 1;

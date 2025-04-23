@@ -4,7 +4,7 @@ use primitive_types::U256;
 use std::rc::Rc;
 mod tests {
 
-    use minustwo::opcodes::stack_ops::execute_stack_duplicate;
+    use minustwo::opcodes::{memory_ops::execute_memory, stack_ops::execute_stack_duplicate};
 
     use super::*;
 
@@ -79,5 +79,23 @@ mod tests {
         execute_arithmetic(Opcode::ADD, &mut machine).unwrap();
 
         assert_eq!(machine.stack.pop().unwrap(), U256::from(0x1A));
+    }
+
+    #[test]
+    fn get_memory_length() {
+        let mut machine = Machine::new(Rc::new(vec![]), Rc::new(vec![]), 1024);
+        let value = U256::from_str_radix("0x9361005EA8041821edF4BeaF5B0518d9e75AeB13", 16).unwrap();
+        let be_val: [u8; 32] = value.to_big_endian();
+
+        let start_index = be_val.iter().position(|&val| val != 0).unwrap_or(32);
+        let res = &be_val[start_index..];
+
+        machine.memory.store(0, &res).unwrap();
+
+        execute_memory(Opcode::MSIZE, &mut machine).unwrap();
+
+        println!("{}", machine.memory);
+
+        assert_eq!(machine.stack.pop().unwrap(), U256::from(20));
     }
 }

@@ -2,14 +2,13 @@ use minustwo::machine::memory::Memory;
 
 #[cfg(test)]
 mod tests {
-    use minustwo::errors::memory;
     use primitive_types::U256;
 
     use super::*;
 
     #[test]
     fn show_memory() {
-        let mut memory: Memory = Memory::init(32);
+        let memory: Memory = Memory::init(32);
 
         println!("Empty memory: {memory}");
 

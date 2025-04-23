@@ -144,7 +144,7 @@ mod tests {
         let mut state = AccountState {
             accounts: HashMap::new(),
         };
-        // [`Opcode`]: [PUSH1 FF, PUSH1 00, MSTORE, PUSH1 FF, PUSH1 01, MSTORE]
+        // [`Opcode`]: [PUSH1 FF, PUSH1 00, MSTORE, PUSH1 FF, PUSH1 01, MSTORE, MLOAD]
         let code = vec![0x60, 0xFF, 0x60, 0x00, 0x52, 0x60, 0xFF, 0x60, 0x01, 0x52];
 
         let caller = H160::from_low_u64_be(0xabc);
