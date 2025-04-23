@@ -15,6 +15,7 @@ pub struct Machine {
     pub stack: Stack,
     pub pc: usize,
     pub halted: bool,
+    pub invalid: bool,
 }
 
 impl Machine {
@@ -26,6 +27,7 @@ impl Machine {
             stack: Stack::init(),
             pc: 0,
             halted: false,
+            invalid: false,
         }
     }
 

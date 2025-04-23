@@ -1,6 +1,7 @@
 use crate::errors::Error;
 use crate::errors::opcode::OpcodeError;
 use crate::machine::Machine;
+use crate::opcodes::stack_ops::execute_stack_swap;
 use crate::opcodes::{
     Opcode,
     arithmetic::{execute_arithmetic, execute_logical},
@@ -74,6 +75,32 @@ pub fn execute_opcode(machine: &mut Machine, opcode: usize) -> Result<(), Error>
         0x83 => execute_stack_duplicate(Opcode::DUP4, 4, machine),
         0x84 => execute_stack_duplicate(Opcode::DUP5, 5, machine),
         0x85 => execute_stack_duplicate(Opcode::DUP6, 6, machine),
+        0x86 => execute_stack_duplicate(Opcode::DUP7, 7, machine),
+        0x87 => execute_stack_duplicate(Opcode::DUP8, 8, machine),
+        0x88 => execute_stack_duplicate(Opcode::DUP9, 9, machine),
+        0x89 => execute_stack_duplicate(Opcode::DUP10, 10, machine),
+        0x8A => execute_stack_duplicate(Opcode::DUP11, 11, machine),
+        0x8B => execute_stack_duplicate(Opcode::DUP12, 12, machine),
+        0x8C => execute_stack_duplicate(Opcode::DUP13, 13, machine),
+        0x8D => execute_stack_duplicate(Opcode::DUP14, 14, machine),
+        0x8E => execute_stack_duplicate(Opcode::DUP15, 15, machine),
+        0x8F => execute_stack_duplicate(Opcode::DUP16, 16, machine),
+        0x90 => execute_stack_swap(Opcode::SWAP1, 1, machine),
+        0x91 => execute_stack_swap(Opcode::SWAP2, 2, machine),
+        0x92 => execute_stack_swap(Opcode::SWAP3, 3, machine),
+        0x93 => execute_stack_swap(Opcode::SWAP4, 4, machine),
+        0x94 => execute_stack_swap(Opcode::SWAP5, 5, machine),
+        0x95 => execute_stack_swap(Opcode::SWAP6, 6, machine),
+        0x96 => execute_stack_swap(Opcode::SWAP7, 7, machine),
+        0x97 => execute_stack_swap(Opcode::SWAP8, 8, machine),
+        0x98 => execute_stack_swap(Opcode::SWAP9, 9, machine),
+        0x99 => execute_stack_swap(Opcode::SWAP10, 10, machine),
+        0x9A => execute_stack_swap(Opcode::SWAP11, 11, machine),
+        0x9B => execute_stack_swap(Opcode::SWAP12, 12, machine),
+        0x9C => execute_stack_swap(Opcode::SWAP13, 13, machine),
+        0x9D => execute_stack_swap(Opcode::SWAP14, 14, machine),
+        0x9E => execute_stack_swap(Opcode::SWAP15, 15, machine),
+        0x9F => execute_stack_swap(Opcode::SWAP16, 16, machine),
         _ => Err(Error::OpcodeError(OpcodeError::InvalidOpcode(opcode))), // Handle unknown opcodes
     }?;
     println!("After executing {:02X?}:\n{}", opcode, machine.stack);

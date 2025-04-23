@@ -41,6 +41,13 @@ impl Stack {
         self.contents.last().ok_or(StackError::EmptyStack)
     }
 
+    pub fn swap(&mut self, index: usize) -> Result<(), StackError> {
+        let contents = &mut self.contents;
+        let length = contents.len();
+        contents.swap(length - 1, index);
+        Ok(())
+    }
+
     pub fn is_empty(&self) -> bool {
         self.contents.is_empty()
     }

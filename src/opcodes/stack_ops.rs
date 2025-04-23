@@ -52,3 +52,8 @@ pub fn execute_stack_duplicate(
 
     Ok(())
 }
+
+pub fn execute_stack_swap(op: Opcode, position: usize, machine: &mut Machine) -> Result<(), Error> {
+    _ = &mut machine.stack.swap(position - 1)?;
+    Ok(())
+}

@@ -4,7 +4,10 @@ use primitive_types::U256;
 use std::rc::Rc;
 mod tests {
 
-    use minustwo::opcodes::{memory_ops::execute_memory, stack_ops::execute_stack_duplicate};
+    use minustwo::opcodes::{
+        memory_ops::execute_memory,
+        stack_ops::{execute_stack_duplicate, execute_stack_swap},
+    };
 
     use super::*;
 
@@ -97,5 +100,23 @@ mod tests {
         println!("{}", machine.memory);
 
         assert_eq!(machine.stack.pop().unwrap(), U256::from(20));
+    }
+
+    #[test]
+    fn test_swap() {
+        let code = Rc::new(vec![0x01, 0x02, 0x03, 0x04, 0x06]);
+        let mut machine = Machine::new(code.clone(), Rc::new(vec![]), 1024);
+
+        machine.stack.push(U256::from(code[0])).unwrap();
+        machine.stack.push(U256::from(code[1])).unwrap();
+        machine.stack.push(U256::from(code[2])).unwrap();
+        machine.stack.push(U256::from(code[3])).unwrap();
+        machine.stack.push(U256::from(code[4])).unwrap();
+
+        println!("Before swap:\n{}", machine.stack);
+
+        execute_stack_swap(Opcode::SWAP3, 3, &mut machine).unwrap();
+
+        println!("After swap:\n{}", machine.stack);
     }
 }
