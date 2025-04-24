@@ -1,13 +1,13 @@
 use crate::{
     errors::{Error, MemoryError},
-    machine::Machine,
+    execution::ExecutionContext,
 };
 
 use super::Opcode;
 
-pub fn execute_memory(op: Opcode, machine: &mut Machine) -> Result<(), Error> {
-    let memory = &mut machine.memory;
-    let stack = &mut machine.stack;
+pub fn execute_memory(op: Opcode, ctx: &mut ExecutionContext) -> Result<(), Error> {
+    let memory = &mut ctx.machine.memory;
+    let stack = &mut ctx.machine.stack;
 
     let res = match op {
         Opcode::MLOAD => {
@@ -46,6 +46,8 @@ pub fn execute_memory(op: Opcode, machine: &mut Machine) -> Result<(), Error> {
         Opcode::MSIZE => stack.push(memory.effective_len())?,
         _ => todo!(),
     };
-    machine.pc += 1;
+    ctx.gas_meter.charge(100)?;
+
+    ctx.machine.pc += 1;
     Ok(())
 }

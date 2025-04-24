@@ -1,39 +1,46 @@
 use super::Opcode;
 use crate::{
     errors::{Error, StackError},
-    machine::Machine,
+    execution::ExecutionContext,
 };
 use primitive_types::U256;
 
-pub fn execute_stack_push(_op: Opcode, _offset: usize, machine: &mut Machine) -> Result<(), Error> {
-    let pc = machine.pc;
+pub fn execute_stack_push(
+    _op: Opcode,
+    _offset: usize,
+    ctx: &mut ExecutionContext,
+) -> Result<(), Error> {
+    let pc = ctx.machine.pc;
 
-    if pc + 1 >= machine.code.len() {
+    if pc + 1 >= ctx.machine.code.len() {
         return Err(Error::StackError(StackError::InvalidItem));
     }
 
-    let value = machine.code[pc + 1];
+    let value = ctx.machine.code[pc + 1];
 
-    machine.stack.push(U256::from(value))?;
+    ctx.machine.stack.push(U256::from(value))?;
 
-    println!("{}", machine.stack);
+    println!("{}", ctx.machine.stack);
 
     // increment PC to skip the operand (1 byte)
-    machine.pc += 2;
+    ctx.machine.pc += 2;
+
+    ctx.gas_meter.charge(3)?;
+
     Ok(())
 }
 
-pub fn execute_stack_pop(_op: Opcode, machine: &mut Machine) -> Result<(), Error> {
-    let _ = &machine.stack.pop();
+pub fn execute_stack_pop(_op: Opcode, ctx: &mut ExecutionContext) -> Result<(), Error> {
+    let _ = &ctx.machine.stack.pop();
     Ok(())
 }
 
 pub fn execute_stack_duplicate(
     _op: Opcode,
     index: usize,
-    machine: &mut Machine,
+    ctx: &mut ExecutionContext,
 ) -> Result<(), Error> {
-    let stack = &mut machine.stack;
+    let stack = &mut ctx.machine.stack;
 
     let contents = stack.get_contents();
 
@@ -48,12 +55,19 @@ pub fn execute_stack_duplicate(
 
     stack.push(*value)?;
 
-    machine.pc += index;
+    ctx.machine.pc += index;
+
+    ctx.gas_meter.charge(3)?;
 
     Ok(())
 }
 
-pub fn execute_stack_swap(op: Opcode, position: usize, machine: &mut Machine) -> Result<(), Error> {
-    _ = &mut machine.stack.swap(position - 1)?;
+pub fn execute_stack_swap(
+    op: Opcode,
+    position: usize,
+    ctx: &mut ExecutionContext,
+) -> Result<(), Error> {
+    _ = &mut ctx.machine.stack.swap(position - 1)?;
+    ctx.gas_meter.charge(3)?;
     Ok(())
 }

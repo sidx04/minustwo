@@ -1,7 +1,9 @@
 pub mod execute;
+pub mod gas;
 
 use crate::machine::{Machine, state::AccountState};
 use execute::execute_opcode;
+use gas::GasMeter;
 use primitive_types::{H160, U256};
 
 #[derive(Debug)]
@@ -11,6 +13,7 @@ pub struct ExecutionContext<'a> {
     pub caller: H160,
     pub callee: H160,
     pub value: U256,
+    pub gas_meter: GasMeter,
     pub input_data: Vec<usize>,
 }
 
@@ -21,6 +24,7 @@ impl<'a> ExecutionContext<'a> {
         caller: H160,
         callee: H160,
         value: U256,
+        gas_meter: GasMeter,
         input_data: Vec<usize>,
     ) -> Self {
         Self {
@@ -29,6 +33,7 @@ impl<'a> ExecutionContext<'a> {
             caller,
             callee,
             value,
+            gas_meter,
             input_data,
         }
     }
@@ -41,7 +46,7 @@ impl<'a> ExecutionContext<'a> {
         let opcode = self.machine.code[self.machine.pc];
         println!("Opcode: {opcode:02X}");
 
-        execute_opcode(self.machine, opcode).unwrap();
+        execute_opcode(self, opcode).unwrap();
 
         Ok(())
     }
@@ -53,6 +58,11 @@ impl<'a> ExecutionContext<'a> {
             }
             self.step()?;
         }
+        println!(
+            "Gas used: {} | Gas remaining: {}",
+            self.gas_meter.used(),
+            self.gas_meter.remaining()
+        );
         Ok(())
     }
 }

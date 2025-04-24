@@ -1,12 +1,12 @@
 use primitive_types::U256;
 
-use crate::{errors::Error, machine::Machine};
+use crate::{errors::Error, execution::ExecutionContext};
 
 use super::Opcode;
 
-pub fn execute_control(op: Opcode, machine: &mut Machine) -> Result<(), Error> {
-    let stack = &mut machine.stack;
-    let memory = &mut machine.memory;
+pub fn execute_control(op: Opcode, ctx: &mut ExecutionContext) -> Result<(), Error> {
+    let stack = &mut ctx.machine.stack;
+    let memory = &mut ctx.machine.memory;
 
     let _ = match op {
         Opcode::STOP | Opcode::RETURN => {
@@ -24,9 +24,11 @@ pub fn execute_control(op: Opcode, machine: &mut Machine) -> Result<(), Error> {
             stack.clear();
             memory.clear();
 
-            machine.halted = true;
+            ctx.machine.halted = true;
         }
         _ => todo!(),
     };
+    ctx.gas_meter.charge(0)?;
+
     Ok(())
 }

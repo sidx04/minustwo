@@ -1,7 +1,9 @@
+pub use self::gas::GasError;
 pub use self::memory::MemoryError;
 pub use self::opcode::OpcodeError;
 pub use self::stack::StackError;
 
+pub mod gas;
 pub mod memory;
 pub mod opcode;
 pub mod stack;
@@ -12,7 +14,7 @@ use std::fmt;
 pub enum Error {
     StackError(StackError),
     MemoryError(MemoryError),
-    // GasError(GasError),
+    GasError(GasError),
     OpcodeError(OpcodeError),
 }
 
@@ -22,6 +24,7 @@ impl fmt::Display for Error {
             Error::StackError(e) => write!(f, "Stack error: {}", e),
             Error::MemoryError(e) => write!(f, "Memory error: {}", e),
             Error::OpcodeError(e) => write!(f, "Opcode error: {}", e),
+            Error::GasError(e) => write!(f, "Opcode error: {}", e),
         }
     }
 }
@@ -43,5 +46,11 @@ impl From<MemoryError> for Error {
 impl From<OpcodeError> for Error {
     fn from(err: OpcodeError) -> Self {
         Error::OpcodeError(err)
+    }
+}
+
+impl From<GasError> for Error {
+    fn from(err: GasError) -> Self {
+        Error::GasError(err)
     }
 }

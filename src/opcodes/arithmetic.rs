@@ -1,11 +1,11 @@
 use primitive_types::U256;
 
 use crate::errors::{Error, StackError};
-use crate::machine::Machine;
+use crate::execution::ExecutionContext;
 use crate::opcodes::Opcode;
 
-pub fn execute_arithmetic(op: Opcode, machine: &mut Machine) -> Result<(), Error> {
-    let stack = &mut machine.stack;
+pub fn execute_arithmetic(op: Opcode, ctx: &mut ExecutionContext) -> Result<(), Error> {
+    let stack = &mut ctx.machine.stack;
     let a = stack.pop()?;
     let b = stack.pop()?;
 
@@ -41,15 +41,16 @@ pub fn execute_arithmetic(op: Opcode, machine: &mut Machine) -> Result<(), Error
     }
     .unwrap();
 
+    ctx.gas_meter.charge(3)?;
     stack.push(result)?;
 
-    machine.pc += 1;
+    ctx.machine.pc += 1;
 
     Ok(())
 }
 
-pub fn execute_logical(op: Opcode, machine: &mut Machine) -> Result<(), Error> {
-    let stack = &mut machine.stack;
+pub fn execute_logical(op: Opcode, ctx: &mut ExecutionContext) -> Result<(), Error> {
+    let stack = &mut ctx.machine.stack;
     let a = stack.pop()?;
     let b = stack.pop()?;
 
@@ -65,9 +66,10 @@ pub fn execute_logical(op: Opcode, machine: &mut Machine) -> Result<(), Error> {
         _ => todo!(),
     };
 
+    ctx.gas_meter.charge(3)?;
     stack.push(result)?;
 
-    machine.pc += 1;
+    ctx.machine.pc += 1;
 
     Ok(())
 }
