@@ -1,8 +1,10 @@
+pub use self::environment::EnvError;
 pub use self::gas::GasError;
 pub use self::memory::MemoryError;
 pub use self::opcode::OpcodeError;
 pub use self::stack::StackError;
 
+pub mod environment;
 pub mod gas;
 pub mod memory;
 pub mod opcode;
@@ -16,6 +18,7 @@ pub enum Error {
     MemoryError(MemoryError),
     GasError(GasError),
     OpcodeError(OpcodeError),
+    EnvironmentError(EnvError),
 }
 
 impl fmt::Display for Error {
@@ -25,6 +28,7 @@ impl fmt::Display for Error {
             Error::MemoryError(e) => write!(f, "Memory error: {}", e),
             Error::OpcodeError(e) => write!(f, "Opcode error: {}", e),
             Error::GasError(e) => write!(f, "Opcode error: {}", e),
+            Error::EnvironmentError(e) => write!(f, "Environment error: {}", e),
         }
     }
 }
@@ -52,5 +56,11 @@ impl From<OpcodeError> for Error {
 impl From<GasError> for Error {
     fn from(err: GasError) -> Self {
         Error::GasError(err)
+    }
+}
+
+impl From<EnvError> for Error {
+    fn from(err: EnvError) -> Self {
+        Error::EnvironmentError(err)
     }
 }

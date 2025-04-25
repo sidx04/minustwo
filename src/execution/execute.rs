@@ -1,5 +1,6 @@
 use crate::errors::Error;
 use crate::errors::opcode::OpcodeError;
+use crate::opcodes::environmental::execute_env;
 use crate::opcodes::stack_ops::execute_stack_swap;
 use crate::opcodes::{
     Opcode,
@@ -35,6 +36,11 @@ pub fn execute_opcode(ctx: &mut ExecutionContext, opcode: usize) -> Result<(), E
         0x17 => execute_logical(Opcode::OR, ctx),
         0x18 => execute_logical(Opcode::XOR, ctx),
         0x19 => execute_logical(Opcode::NOT, ctx),
+        0x30 => execute_env(Opcode::ADDRESS, ctx),
+        0x31 => execute_env(Opcode::BALANCE, ctx),
+        0x32 => execute_env(Opcode::ORIGIN, ctx),
+        0x33 => execute_env(Opcode::CALLER, ctx),
+        0x34 => execute_env(Opcode::CALLVALUE, ctx),
         0x50 => execute_stack_pop(Opcode::POP, ctx),
         0x51 => execute_memory(Opcode::MLOAD, ctx),
         0x52 => execute_memory(Opcode::MSTORE, ctx),

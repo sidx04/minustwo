@@ -72,4 +72,15 @@ mod tests {
 
         println!("{}", ctx.machine.memory);
     }
+
+    #[test]
+    fn test_env_opcodes() {
+        // [`Opcode`] : [ADDRESS, BALANCE, CALLER, BALANCE]
+        let code = vec![0x30, 0x31, 0x33, 0x031];
+        let mut ctx = setup(vec![], code, 21000, 1024);
+        ctx.run().unwrap();
+
+        assert_eq!(ctx.machine.stack.pop().unwrap(), U256::from(1000));
+        assert_eq!(ctx.machine.stack.pop().unwrap(), U256::from(100));
+    }
 }

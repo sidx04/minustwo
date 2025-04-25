@@ -1,5 +1,6 @@
 pub mod arithmetic;
 pub mod control;
+pub mod environmental;
 pub mod memory_ops;
 pub mod stack_ops;
 
