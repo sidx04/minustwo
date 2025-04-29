@@ -59,19 +59,25 @@ impl Stack {
 
 impl fmt::Display for Stack {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "┌────────────────── Stack ──────────────────┐")?;
+        writeln!(
+            f,
+            "┌────────────────────────────── Stack ──────────────────────────────┐"
+        )?;
         if self.contents.is_empty() {
             writeln!(f, "│         [ empty stack ]       │")?;
         } else {
             for (i, value) in self.contents.iter().rev().enumerate() {
                 writeln!(
                     f,
-                    "│ [{:02}] │ 0x{:0>32X} │",
+                    "│ [{:02}] │ 0x{:0>56X} │",
                     self.contents.len() - 1 - i,
                     value
                 )?;
             }
         }
-        writeln!(f, "└───────────────────────────────────────────┘")
+        writeln!(
+            f,
+            "└───────────────────────────────────────────────────────────────────┘"
+        )
     }
 }
