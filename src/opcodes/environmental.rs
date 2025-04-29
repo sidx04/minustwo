@@ -5,6 +5,7 @@ use crate::{errors::Error, execution::ExecutionContext};
 use super::Opcode;
 
 pub fn execute_env(op: Opcode, ctx: &mut ExecutionContext) -> Result<(), Error> {
+    let stack = &mut ctx.machine.stack;
     let _res = match op {
         Opcode::ADDRESS => {
             let address = ctx.callee;
@@ -25,6 +26,16 @@ pub fn execute_env(op: Opcode, ctx: &mut ExecutionContext) -> Result<(), Error> 
         }
         Opcode::CALLVALUE => {
             ctx.machine.stack.push(ctx.value)?;
+        }
+        Opcode::CALLDATALOAD => {
+            let offset = stack.pop()?;
+            let calldata = &ctx.calldata;
+            let slice = &calldata[offset.as_usize()..];
+            let calldata_slice = U256::from_big_endian(slice);
+            stack.push(calldata_slice)?;
+        }
+        Opcode::CALLDATASIZE => {
+            stack.push(U256::from(ctx.calldata.len()))?;
         }
         _ => todo!(),
     };
