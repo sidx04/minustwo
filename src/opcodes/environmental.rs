@@ -6,6 +6,7 @@ use super::Opcode;
 
 pub fn execute_env(op: Opcode, ctx: &mut ExecutionContext) -> Result<(), Error> {
     let stack = &mut ctx.machine.stack;
+    let memory = &mut ctx.machine.memory;
     let _res = match op {
         Opcode::ADDRESS => {
             let address = ctx.callee;
@@ -36,6 +37,14 @@ pub fn execute_env(op: Opcode, ctx: &mut ExecutionContext) -> Result<(), Error> 
         }
         Opcode::CALLDATASIZE => {
             stack.push(U256::from(ctx.calldata.len()))?;
+        }
+        Opcode::CALLDATACOPY => {
+            let dest_offset = stack.pop()?;
+            let calldata_offset = stack.pop()?;
+            let calldata = &ctx.calldata;
+            let slice = &calldata[calldata_offset.as_usize()..];
+
+            memory.store(dest_offset.as_usize(), slice)?;
         }
         _ => todo!(),
     };
