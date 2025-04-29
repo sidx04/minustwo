@@ -1,7 +1,7 @@
 pub mod execute;
 pub mod gas;
 
-use crate::machine::{Machine, state::AccountState};
+use crate::machine::{Machine, state::State};
 use execute::execute_opcode;
 use gas::GasMeter;
 use primitive_types::{H160, U256};
@@ -9,23 +9,23 @@ use primitive_types::{H160, U256};
 #[derive(Debug)]
 pub struct ExecutionContext<'a> {
     pub machine: &'a mut Machine,
-    pub state: &'a mut AccountState,
+    pub state: &'a mut State,
     pub caller: H160,
     pub callee: H160,
     pub value: U256,
     pub gas_meter: GasMeter,
-    pub input_data: Vec<usize>,
+    pub calldata: Vec<u8>,
 }
 
 impl<'a> ExecutionContext<'a> {
     pub fn new(
         machine: &'a mut Machine,
-        state: &'a mut AccountState,
+        state: &'a mut State,
         caller: H160,
         callee: H160,
         value: U256,
         gas_meter: GasMeter,
-        input_data: Vec<usize>,
+        calldata: Vec<u8>,
     ) -> Self {
         Self {
             machine,
@@ -34,7 +34,7 @@ impl<'a> ExecutionContext<'a> {
             callee,
             value,
             gas_meter,
-            input_data,
+            calldata,
         }
     }
 

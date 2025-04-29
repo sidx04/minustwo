@@ -4,6 +4,8 @@ use primitive_types::U256;
 #[cfg(test)]
 mod tests {
 
+    use std::str::FromStr;
+
     use super::*;
 
     #[test]
@@ -82,5 +84,17 @@ mod tests {
 
         assert_eq!(ctx.machine.stack.pop().unwrap(), U256::from(1000));
         assert_eq!(ctx.machine.stack.pop().unwrap(), U256::from(100));
+
+        // [`Opcode`] : [PUSH1 0, CALLDATALOAD, PUSH1 2, CALLDATALOAD, CALLDATASIZE]
+        let code = vec![0x60, 0x00, 0x35, 0x60, 0x02, 0x35, 0x36];
+        let mut ctx = setup(vec![], code, 21000, 1024);
+        ctx.run().unwrap();
+
+        assert_eq!(ctx.machine.stack.pop().unwrap(), U256::from(4));
+        assert_eq!(ctx.machine.stack.pop().unwrap(), U256::from(0x3456));
+        assert_eq!(
+            ctx.machine.stack.pop().unwrap(),
+            U256::from_str("0xFF123456").unwrap()
+        );
     }
 }
