@@ -1,6 +1,7 @@
 use crate::errors::Error;
 use crate::errors::opcode::OpcodeError;
 use crate::opcodes::environmental::execute_env;
+use crate::opcodes::hash_ops::execute_keccak256;
 use crate::opcodes::stack_ops::execute_stack_swap;
 use crate::opcodes::{
     Opcode,
@@ -36,6 +37,7 @@ pub fn execute_opcode(ctx: &mut ExecutionContext, opcode: usize) -> Result<(), E
         0x17 => execute_logical(Opcode::OR, ctx),
         0x18 => execute_logical(Opcode::XOR, ctx),
         0x19 => execute_logical(Opcode::NOT, ctx),
+        0x20 => execute_keccak256(Opcode::KECCAK256, ctx),
         0x30 => execute_env(Opcode::ADDRESS, ctx),
         0x31 => execute_env(Opcode::BALANCE, ctx),
         0x32 => execute_env(Opcode::ORIGIN, ctx),

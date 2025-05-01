@@ -1,8 +1,10 @@
 pub mod arithmetic;
 pub mod control;
 pub mod environmental;
+pub mod hash_ops;
 pub mod memory_ops;
 pub mod stack_ops;
+pub mod storage_ops;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 /// Opcodes used the EVM, as listed in https://evm.codes.

@@ -112,4 +112,18 @@ mod tests {
 
         println!("{}", ctx.machine.memory);
     }
+
+    #[test]
+    fn test_hash() {
+        // [`Opcode`] : [PUSH1 0xFF, PUSH1 0, MSTORE, PUSH1 4, PUSH1 0, KECCAK256]
+        let code = vec![0x61, 0xFF, 0x61, 0x00, 0x52, 0x61, 0x04, 0x061, 0x00, 0x20];
+        let mut ctx = setup(vec![], code, 21000, MEM_SIZE);
+        ctx.run().unwrap();
+
+        assert_eq!(
+            ctx.machine.stack.pop().unwrap(),
+            U256::from_str("e8e77626586f73b955364c7b4bbf0bb7f7685ebd40e852b164633a4acbd3244c")
+                .unwrap()
+        );
+    }
 }
