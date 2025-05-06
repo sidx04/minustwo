@@ -1,6 +1,9 @@
 use primitive_types::{H160, H256, U256};
 
-use crate::{errors::Error, execution::ExecutionContext};
+use crate::{
+    errors::{Error, gas},
+    execution::ExecutionContext,
+};
 
 use super::Opcode;
 
@@ -45,6 +48,10 @@ pub fn execute_env(op: Opcode, ctx: &mut ExecutionContext) -> Result<(), Error> 
             let slice = &calldata[calldata_offset.as_usize()..];
 
             memory.store(dest_offset.as_usize(), slice)?;
+        }
+        Opcode::GASPRICE => {
+            let gas_used = ctx.gas_meter.used();
+            stack.push(gas_used.into())?;
         }
         _ => todo!(),
     };
