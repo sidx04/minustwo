@@ -5,7 +5,6 @@ pub use self::{memory::Memory, stack::Stack};
 pub mod memory;
 pub mod stack;
 pub mod state;
-pub mod storage;
 
 #[derive(Debug, Clone)]
 pub struct Machine {

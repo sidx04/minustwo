@@ -5,6 +5,7 @@ pub mod hash_ops;
 pub mod memory_ops;
 pub mod stack_ops;
 pub mod storage_ops;
+pub mod system_ops;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 /// Opcodes used the EVM, as listed in https://evm.codes.
@@ -148,21 +149,4 @@ pub enum Opcode {
     REVERT = 0xFD,
     INVALID = 0xFE,
     SELFDESTRUCT = 0xFF,
-}
-
-impl Opcode {
-    pub fn from_byte(byte: usize) -> Option<Self> {
-        match byte {
-            0x00 => Some(Opcode::STOP),
-            0x01 => Some(Opcode::ADD),
-            0x02 => Some(Opcode::MUL),
-            0x03 => Some(Opcode::SUB),
-            0x04 => Some(Opcode::DIV),
-            0x06 => Some(Opcode::MOD),
-            0x60 => Some(Opcode::PUSH1),
-            0x56 => Some(Opcode::JUMP),
-            0x57 => Some(Opcode::JUMPI),
-            _ => None, // Unknown opcode
-        }
-    }
 }

@@ -11,8 +11,8 @@ pub fn execute_keccak256(_op: Opcode, ctx: &mut ExecutionContext) -> Result<(), 
     let offset = stack.pop()?;
     let size = stack.pop()?;
 
-    let mut data = memory.access(offset.as_usize(), size.as_usize())?;
-    let output = hash_keccak(&mut data)?;
+    let data = memory.access(offset.as_usize(), size.as_usize())?;
+    let output = hash_keccak(data)?;
     stack.push(U256::from_big_endian(&output))?;
 
     ctx.machine.pc += 1;

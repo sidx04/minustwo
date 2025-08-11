@@ -9,7 +9,11 @@ primitive-types = "0.13.1"
 clap = { version = "4", features = ["derive"] }
 hex = "0.4.3"
 alloy-primitives = "1.1.0"
+alloy-rlp = "0.3.11"
+ratatui = "0.29.0"
+crossterm = "0.29.0"
+anyhow = "1.0.98"
 
-[[bin]]
-name = "minustwo"
-path = "src/main.rs"
+# [[bin]]
+# name = "minustwo"
+# path = "src/main.rs"

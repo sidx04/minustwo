@@ -42,7 +42,7 @@ pub fn setup(
     }
 }
 
-pub fn hash_keccak(bytes: &mut Vec<u8>) -> Result<[u8; 32], Error> {
+pub fn hash_keccak(bytes: Vec<u8>) -> Result<[u8; 32], Error> {
     let mut hasher = Keccak256::new();
     let mut output = [0u8; 32];
 

@@ -63,7 +63,7 @@ pub fn execute_stack_duplicate(
 }
 
 pub fn execute_stack_swap(
-    op: Opcode,
+    _op: Opcode,
     position: usize,
     ctx: &mut ExecutionContext,
 ) -> Result<(), Error> {

@@ -1,21 +1,26 @@
 use primitive_types::{H160, U256};
-use std::collections::{BTreeMap, HashMap};
+use std::collections::HashMap;
+
+use crate::storage::kv::KeyValueStore;
 
 #[derive(Debug, Clone)]
 pub struct Account {
     pub nonce: U256,
     pub balance: U256,
-    pub storage: BTreeMap<U256, U256>,
     pub code: Vec<usize>,
     pub address: H160,
 }
 
 #[derive(Debug)]
-pub struct AccountState {
+pub struct State {
+    // contract_address -> its account
     pub accounts: HashMap<H160, Account>,
+    // contract_address -> its storage, for now let it be K-V store
+    pub storage: KeyValueStore,
+    // pub snapshots: Vec<(HashMap<H160, Account>, HashMap<H160, KeyValueStore>)> || todo()!
 }
 
-impl AccountState {
+impl State {
     pub fn get_account(&self, address: &H160) -> Option<&Account> {
         self.accounts.get(address)
     }
@@ -31,7 +36,6 @@ impl AccountState {
                 address,
                 nonce: U256::zero(),
                 balance,
-                storage: BTreeMap::new(),
                 code,
             },
         );
